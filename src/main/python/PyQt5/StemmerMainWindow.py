@@ -5,7 +5,6 @@ import os.path
 class StemmerMainWindow(object):
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         MainWindow.setMinimumSize(QtCore.QSize(800, 600))
         MainWindow.setMaximumSize(QtCore.QSize(800, 600))
@@ -65,7 +64,7 @@ class StemmerMainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("Stemmer", "Stemmer"))
         self.LoadEdLabel.setText(_translate("MainWindow", "Путь к загружаемому файлу"))
         self.DataEdLabel.setText(_translate("MainWindow", "Исходные данные"))
         self.SaveEdLabel.setText(_translate("MainWindow", "Путь для записываемого файла"))
