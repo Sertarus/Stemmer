@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os.path
+import re
 
 
 class StemmerMainWindow(object):
@@ -49,6 +50,7 @@ class StemmerMainWindow(object):
         self.LoadM = QtWidgets.QAction(MainWindow)
         self.LoadM.triggered.connect(self.loadText)
         self.DelM = QtWidgets.QAction(MainWindow)
+        self.DelM.triggered.connect(self.removeNonLexicalElements)
         self.SortM = QtWidgets.QAction(MainWindow)
         self.StemM = QtWidgets.QAction(MainWindow)
         self.menuFile.addAction(self.SaveM)
@@ -89,3 +91,34 @@ class StemmerMainWindow(object):
         file = open(self.SaveEd.text(), "w")
         file.write(self.ResultEd.toPlainText())
         file.close()
+
+    def removeNonLexicalElements(self):
+        text = self.DataEd.toPlainText()
+        symbols = ['.', ',', ';', ':', '?', '!', '(', ')', '\"', '\'', '-', '–', '+', '*', '/', '[', ']', '{', '}',
+                   '/', '\\', '–', '°', '_' '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        rawWordList = text.split()
+        i = 0
+        while i != len(rawWordList):
+            word = rawWordList[i]
+            k = 0
+            deletedWord = False
+            while k != len(word):
+                if word[k] in symbols and (word[k] != '\'' or k == 0 or k == len(word) - 1):
+                    if k != 0 and k != len(word) - 1:
+                        rawWordList.insert(i + 1, word[k + 1:])
+                        word = word[:k]
+                        break
+                    else:
+                        word = word[:k] + word[k+1:]
+                        k -= 1
+                if word == "":
+                    deletedWord = True
+                    rawWordList.remove(rawWordList[i])
+                    break
+                k += 1
+            if not deletedWord:
+                rawWordList[i] = word
+                i += 1
+        self.ResultEd.clear()
+        for word in rawWordList:
+            self.ResultEd.appendPlainText(word)
